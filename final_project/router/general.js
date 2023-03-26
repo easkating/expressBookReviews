@@ -3,6 +3,7 @@ let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
+const axios = require('axios');
 
 
 public_users.post("/register", (req,res) => {
@@ -29,11 +30,15 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
+/*
 public_users.get('/',function (req, res) {
     res.status(200).send(JSON.stringify(books, null, 2));
 });
+*/
+
 
 // Get book details based on ISBN
+/* original edwin
 public_users.get('/isbn/:isbn',function (req, res) {
   //Write your code here
   const isbn = req.params.isbn;
@@ -45,8 +50,11 @@ public_users.get('/isbn/:isbn',function (req, res) {
   }
   //return res.status(300).json({message: "Yet to be implemented"});
  });
-  
+ */ 
+
+
 // Get book details based on author
+/*
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
 
@@ -67,6 +75,8 @@ public_users.get('/author/:author',function (req, res) {
 
   //return res.status(300).json({message: "Yet to be implemented"});
 });
+*/
+
 
 // Get all books based on title
 
@@ -90,6 +100,7 @@ public_users.get('/title/:title', function(req, res) {
 
 console.log(users)
 //  Get book review
+
 public_users.get('/review/:isbn',function (req, res) {
   //Write your code here
   console.log(users)
@@ -109,4 +120,63 @@ public_users.get('/review/:isbn',function (req, res) {
   //return res.status(300).json({message: "Yet to be implemented"});
 });
 
+
+
+
+
+
+//get all books axios
+const getBooks = async () => {
+  try {
+    const response = await axios.get('http://localhost:5000');
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+getBooks()
+  .then((data) => {
+    console.log(data);
+  });
+
+  /*
+//get books based on isbn
+public_users.get('/isbn/:isbn', async function (req, res) {
+  const isbn = req.params.isbn;
+  try {
+    const response = await axios.get(url & `/books/${isbn}`);
+    const book = response.data;
+    return res.status(200).json(book);
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      return res.status(404).json({ message: "Book not found" });
+    } else {
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+});
+  */
+
+
+/*
+  //get books based on author axios
+  public_users.get('/author/:author', async function (req, res) {
+    try {
+      const author = req.params.author;
+      const response = await axios.get(url & `/books`);
+      const books = response.data;
+      const result = books.filter((book) => book.author.toLowerCase() === author.toLowerCase());
+      if (result.length > 0) {
+        return res.status(200).json({ books: result });
+      } else {
+        return res.status(404).json({ message: "No books found for the author" });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  });
+*/
 module.exports.general = public_users;
