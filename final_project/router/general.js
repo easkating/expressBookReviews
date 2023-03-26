@@ -77,7 +77,7 @@ public_users.get('/author/:author',function (req, res) {
 });
 */
 
-
+/*
 // Get all books based on title
 
 
@@ -96,7 +96,7 @@ public_users.get('/title/:title', function(req, res) {
       return res.status(200).json({books: matchingBooks});
     }
 });
-
+*/
 
 console.log(users)
 //  Get book review
@@ -123,12 +123,10 @@ public_users.get('/review/:isbn',function (req, res) {
 
 
 
-
-
 //get all books axios
 const getBooks = async () => {
   try {
-    const response = await axios.get('http://localhost:5000');
+    const response = await axios.get(`https://github.com/easkating/expressBookReviews.git`);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -140,7 +138,7 @@ getBooks()
     console.log(data);
   });
 
-  /*
+  
 //get books based on isbn
 public_users.get('/isbn/:isbn', async function (req, res) {
   const isbn = req.params.isbn;
@@ -157,10 +155,10 @@ public_users.get('/isbn/:isbn', async function (req, res) {
     }
   }
 });
-  */
+  
 
 
-/*
+
   //get books based on author axios
   public_users.get('/author/:author', async function (req, res) {
     try {
@@ -178,5 +176,23 @@ public_users.get('/isbn/:isbn', async function (req, res) {
       return res.status(500).json({ message: "Internal server error" });
     }
   });
-*/
+
+  function getBookDetailsByTitle(title) {
+    return new Promise((resolve, reject) => {
+      axios.get(`http://localhost:5000/title/${title}`)
+        .then(response => {
+          resolve(response.data.books);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+  
+  getBookDetailsByTitle(title)
+    .then(books => console.log(books))
+    .catch(error => console.log(error));
+
+
+
 module.exports.general = public_users;
